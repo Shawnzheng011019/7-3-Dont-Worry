@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int vis[502], path[502], vec[502][502];
+int n, m, cnt, a, b;
+int DFS(int x) {//深度优先遍历
+    //dfs搜索起点到终点路径的条数
+    vis[x] = 1;
+    if (path[x]) //已经搜索过
+        return path[x];
+    for (int i = 1; i <= n; i++)//开始搜索
+        if (vec[x][i])
+            path[x] += DFS(i);
+    return path[x];
+}
+int main() {
+    int i;
+    cin >> n >> m;
+    for (i = 1; i <= m; i++) {
+        cin >> a >> b;
+        vec[a][b] = 1;
+    }
+    cin >> a >> b;
+    path[b] = 1;
+    //初始化b到b的路径条数为1
+    //从起点a开始dfs
+    cnt = DFS(a);//cnt为满足条件的路径数目
+    int flag = 1;//记录是否为逻辑自洽
+    for (i = 1; i <= n; i++) {
+        if (vis[i] && !path[i]) {
+            //表示从该节点i进行搜索，没有一条路径能到达End节点，所以不为逻辑自洽
+            flag = 0;
+            break;
+        }
+    }
+    cout << cnt << ' ';
+    if (flag)
+        cout << "Yes" << endl;
+    else
+        cout << "No" << endl;
+    return 0;
+}
